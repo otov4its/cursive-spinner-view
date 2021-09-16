@@ -1,8 +1,8 @@
 # cursive-spinner-view
 [![Crates.io: cursive-spinner-view](https://img.shields.io/crates/v/cursive-spinner-view.svg)](https://crates.io/crates/cursive-spinner-view)
 [![Documentation](https://docs.rs/cursive-spinner-view/badge.svg)](https://docs.rs/cursive-spinner-view)
-[![CI Status (Github Actions)](https://github.com/otov4its/cursive-spinner-view/workflows/CI/badge.svg?master)](https://github.com/otov4its/cursive-spinner-view/actions)
-[![CD Status (Github Actions)](https://github.com/otov4its/cursive-spinner-view/workflows/CD/badge.svg?master)](https://github.com/otov4its/cursive-spinner-view/actions)
+[![CI Status (Github Actions)](https://github.com/otov4its/cursive-spinner-view/workflows/CI/badge.svg?main)](https://github.com/otov4its/cursive-spinner-view/actions)
+[![CD Status (Github Actions)](https://github.com/otov4its/cursive-spinner-view/workflows/CD/badge.svg?main)](https://github.com/otov4its/cursive-spinner-view/actions)
 
 ![example.gif](example.gif)
 
