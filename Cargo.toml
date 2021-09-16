@@ -1,0 +1,19 @@
+[package]
+name = "cursive-spinner-view"
+version = "0.1.0"
+authors = ["Stanislav Otovchits <otov4its@gmail.com>"]
+description = "Cursive spinner view"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/otov4its/cursive-spinner-view/"
+readme = "README.md"
+keywords = ["cursive", "spinner", "cursive-view", "tui", "terminal"]
+edition = "2018"
+
+
+[dependencies]
+cursive_core = "0.2"
+
+
+[dev-dependencies]
+cursive = "0.16"
+ntest = "*"
