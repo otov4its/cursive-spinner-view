@@ -16,4 +16,4 @@ cursive_core = "0.2"
 
 [dev-dependencies]
 cursive = "0.16"
-ntest = "*"
+ntest = "0.7"
