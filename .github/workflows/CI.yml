@@ -72,3 +72,4 @@ jobs:
 
       - name: Doc
         run: cargo doc --no-deps --verbose
+
