@@ -1,6 +1,6 @@
 [package]
 name = "cursive-spinner-view"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Stanislav Otovchits <otov4its@gmail.com>"]
 description = "Cursive spinner view"
 license = "MIT OR Apache-2.0"
