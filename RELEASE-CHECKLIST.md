@@ -9,7 +9,7 @@
 - [ ] Run `cargo test`
 - [ ] Run `cargo doc`
 - [ ] Git: `git commit -a -m "Release vX.Y.Z"`
-- [ ] Git: `git push origin master`
+- [ ] Git: `git push origin main`
 - [ ] Github CI: wait for success or repeat...
 - [ ] Git: add version annotated tag `git tag -a vX.Y.Z`
 - [ ] Git: push tags `git push origin vX.Y.Z`
