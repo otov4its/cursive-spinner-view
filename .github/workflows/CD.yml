@@ -24,3 +24,4 @@ jobs:
 
       - name: Publish
         run: cargo publish --verbose
+
