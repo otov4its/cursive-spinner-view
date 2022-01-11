@@ -11,9 +11,9 @@ edition = "2018"
 
 
 [dependencies]
-cursive_core = "0.2"
+cursive_core = "0.3"
 
 
 [dev-dependencies]
-cursive = "0.16"
+cursive = "0.17"
 ntest = "0.7"
