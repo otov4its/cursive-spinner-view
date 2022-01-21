@@ -4,6 +4,12 @@
 
 * Nothing
 
+## 0.1.2 (2022-01-21)
+
+### Changed:
+
+* Cargo.toml: cursive version
+
 ## 0.1.1 (2021-09-16)
 
 ### Changed:
