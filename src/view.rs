@@ -4,7 +4,7 @@ use std::{sync::mpsc::Sender, time::Duration};
 #[cfg(test)]
 use std::thread::JoinHandle;
 
-use cursive_core::theme::Style;
+use cursive_core::theme::{Style, StyleType};
 use cursive_core::views::TextView;
 use cursive_core::CbSink;
 use cursive_core::{views::TextContent, Printer, Vec2, View};
@@ -141,7 +141,10 @@ impl SpinnerView {
     }
 
     /// Set spinner's style
-    pub fn style<S: Into<Style>>(&mut self, style: S) -> &mut Self {
+    pub fn style<S: Into<Style>>(&mut self, style: S) -> &mut Self
+    where
+        StyleType: From<S>,
+    {
         self.text_view.set_style(style);
         self
     }
