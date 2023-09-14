@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-* Nothing
+### Added:
+
+* flake.nix for dev shell `nix develop`
 
 ## 0.1.2 (2022-01-21)
 

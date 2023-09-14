@@ -26,6 +26,12 @@ See [HISTORY.md](HISTORY.md)
 $ cargo test
 ```
 
+## Developing
+
+```bash
+$ nix develop
+```
+
 ## License
 
 Licensed under either of
