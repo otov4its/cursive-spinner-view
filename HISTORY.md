@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Changed:
+
+* Fixed compilation issue due to dependency updates
+* Fixed panic on drop Cursive instance
+
 ### Added:
 
 * flake.nix for dev shell `nix develop`
