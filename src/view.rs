@@ -13,15 +13,10 @@ use crate::{
     spinner::Spinner, Frames, ACCCEL_FACTOR, DEFAULT_FRAMES, DEFAULT_IDLING_FRAME, MAX_FPS, MIN_FPS,
 };
 
-pub(crate) enum ThreadControl {
-    Go,
-    Drop,
-}
-
 pub(crate) enum SpinnerControl {
     Frames(Frames),
     Duration(Duration),
-    Stop,
+    Drop,
 }
 
 /// Spinner view
@@ -31,7 +26,6 @@ pub struct SpinnerView {
     speeds: bool,
     text_view: TextView,
     tx_spinner: Sender<SpinnerControl>,
-    tx_thread: Sender<ThreadControl>,
 
     #[cfg(test)]
     // Used in tests to prove that the spinner
@@ -59,7 +53,6 @@ impl SpinnerView {
         let text_view = TextView::new_with_content(content.clone()).no_wrap();
 
         let (tx_spinner, rx_spinner) = mpsc::channel();
-        let (tx_thread, rx_thread) = mpsc::channel();
 
         let spinner = Spinner::new(
             DEFAULT_FRAMES,
@@ -67,7 +60,6 @@ impl SpinnerView {
             cb_sink.clone(),
             content,
             rx_spinner,
-            rx_thread,
         );
 
         let _join_handle = spinner.spin_loop();
@@ -77,7 +69,6 @@ impl SpinnerView {
             speeds: true, //todo? create kinda GearBox instead speeds
             text_view,
             tx_spinner,
-            tx_thread,
 
             #[cfg(test)]
             join_handle: Some(_join_handle),
@@ -88,11 +79,6 @@ impl SpinnerView {
     ///
     /// You can do it as many times as you need.
     pub fn spin_up(&mut self) {
-        if self.spin_ups == 0 {
-            // Wake up spinner thread
-            self.tx_thread.send(ThreadControl::Go).unwrap();
-        }
-
         self.spin_ups = self.spin_ups.saturating_add(1);
 
         self.recalc_duration();
@@ -103,10 +89,6 @@ impl SpinnerView {
     /// To stop the spinner the numbers of spin-downs
     /// have to be equal the numbers of spin-ups.
     pub fn spin_down(&mut self) {
-        if self.spin_ups == 1 {
-            self.tx_spinner.send(SpinnerControl::Stop).unwrap();
-        }
-
         self.spin_ups = self.spin_ups.saturating_sub(1);
 
         self.recalc_duration();
@@ -114,11 +96,8 @@ impl SpinnerView {
 
     /// Stop the spinner immediately
     pub fn stop(&mut self) {
-        if self.spin_ups != 0 {
-            self.tx_spinner.send(SpinnerControl::Stop).unwrap();
-        }
-
         self.spin_ups = 0;
+        self.recalc_duration();
     }
 
     /// The number of spin-ups
@@ -147,11 +126,11 @@ impl SpinnerView {
     }
 
     fn recalc_duration(&self) {
-        self.tx_spinner
-            .send(SpinnerControl::Duration(Duration::from_secs_f32(
-                1.0 / Self::fps(self.spin_ups(), self.speeds) as f32,
-            )))
-            .unwrap();
+        let dur = match self.spin_ups() {
+            0 => Duration::ZERO,
+            spin_ups => Duration::from_secs_f32(1.0 / Self::fps(spin_ups, self.speeds) as f32),
+        };
+        self.tx_spinner.send(SpinnerControl::Duration(dur)).unwrap();
     }
 
     fn fps(spin_ups: usize, speeds: bool) -> usize {
@@ -177,8 +156,7 @@ impl SpinnerView {
 
 impl Drop for SpinnerView {
     fn drop(&mut self) {
-        let _ = self.tx_spinner.send(SpinnerControl::Stop);
-        let _ = self.tx_thread.send(ThreadControl::Drop);
+        let _ = self.tx_spinner.send(SpinnerControl::Drop);
     }
 }
 
@@ -221,8 +199,8 @@ mod tests {
         thread::sleep(Duration::from_millis(10));
 
         let handle = spinner.join_handle();
-
         drop(spinner);
+        drop(siv);
 
         assert!(matches!(handle.join(), Ok(())));
     }
@@ -239,6 +217,7 @@ mod tests {
         let handle = spinner.join_handle();
 
         drop(spinner);
+        drop(siv);
 
         assert!(matches!(handle.join(), Ok(())));
     }
