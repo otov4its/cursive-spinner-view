@@ -52,7 +52,7 @@
           # pkg-config for ncurses
           export PKG_CONFIG_PATH="${pkgs.ncurses.dev}/lib/pkgconfig"
           # zellij session
-          exec zellij --session update-nixos-dev \
+          exec zellij --session cursive-spinner-view-dev \
             --layout dev-layout.kdl
         '';
       };
