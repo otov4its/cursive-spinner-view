@@ -5,6 +5,7 @@
 ### Added:
 
 * flake.nix for dev shell `nix develop`
+* Cargo.lock
 
 ## 0.1.2 (2022-01-21)
 
