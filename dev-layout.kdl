@@ -1,0 +1,21 @@
+layout {
+    pane size=1 borderless=true {
+        plugin location="zellij:tab-bar"
+    }
+    // pane size=1 borderless=true {
+    //     plugin location="zellij:compact-bar"
+    // }
+    pane split_direction="vertical" {
+        pane size="15%" {
+            plugin location="zellij:strider"
+        }
+        pane name="hx" {
+			command "hx"
+			args "./src/lib.rs" "./src/spinner.rs" "./src/view.rs" "./flake.nix" "./dev-layout.kdl"
+		}
+        pane
+    }
+    pane size=2 borderless=true {
+        plugin location="zellij:status-bar"
+    }
+}
