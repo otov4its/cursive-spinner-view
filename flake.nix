@@ -26,6 +26,7 @@
       rustc
       cargo
       clippy
+      rustfmt
       gcc
       ncurses
       pkg-config
