@@ -1,3 +1,4 @@
+use std::sync::mpsc::RecvTimeoutError;
 use std::thread::JoinHandle;
 use std::time::Duration;
 use std::{iter::Cycle, slice::Iter, sync::mpsc::Receiver, thread};
@@ -5,10 +6,7 @@ use std::{iter::Cycle, slice::Iter, sync::mpsc::Receiver, thread};
 use cursive_core::views::TextContent;
 use cursive_core::CbSink;
 
-use crate::{
-    view::{SpinnerControl, ThreadControl},
-    Frames, IdlingFrame, MIN_FPS,
-};
+use crate::{view::SpinnerControl, Frames, IdlingFrame};
 
 type FrameCycle = Cycle<Iter<'static, &'static str>>;
 
@@ -19,7 +17,6 @@ pub(crate) struct Spinner {
     cb_sink: CbSink,
     text_content: TextContent,
     rx_spinner: Receiver<SpinnerControl>,
-    rx_thread: Receiver<ThreadControl>,
 }
 
 impl Spinner {
@@ -29,47 +26,48 @@ impl Spinner {
         cb_sink: CbSink,
         text_content: TextContent,
         rx_spinner: Receiver<SpinnerControl>,
-        rx_thread: Receiver<ThreadControl>,
     ) -> Self {
         Self {
             frames_cycle: Self::cycle_iter(frames),
             idling_frame,
-            duration: Duration::from_secs_f32(1.0 / MIN_FPS as f32),
+            duration: Duration::ZERO,
             cb_sink,
             text_content,
             rx_spinner,
-            rx_thread,
         }
     }
 
     pub(crate) fn spin_loop(mut self) -> JoinHandle<()> {
-        thread::spawn(move || {
-            while let Ok(thread_control) = self.rx_thread.recv() {
-                match thread_control {
-                    ThreadControl::Go => 'l: loop {
-                        while let Ok(spinner_control) = self.rx_spinner.try_recv() {
-                            match spinner_control {
-                                SpinnerControl::Frames(frames) => {
-                                    self.frames_cycle = Self::cycle_iter(frames)
-                                }
-                                SpinnerControl::Duration(dur) => self.duration = dur,
-                                SpinnerControl::Stop => {
-                                    match self.idling_frame {
-                                        IdlingFrame::Is(frame) => self.set_frame(frame),
-                                        IdlingFrame::Last => {}
-                                    }
-
-                                    break 'l;
-                                }
-                            }
-                        }
-
-                        self.set_next_frame();
-                        thread::sleep(self.duration);
-                    },
-
-                    ThreadControl::Drop => break,
+        thread::spawn(move || loop {
+            let spinner_control = if self.duration.is_zero() {
+                Some(self.rx_spinner.recv().unwrap())
+            } else {
+                match self.rx_spinner.recv_timeout(self.duration) {
+                    Err(RecvTimeoutError::Timeout) => None,
+                    Err(e) => panic!("{:?}", e),
+                    Ok(some_ctrl) => Some(some_ctrl),
                 }
+            };
+            match spinner_control {
+                Some(SpinnerControl::Drop) => {
+                    break;
+                }
+                Some(SpinnerControl::Frames(frames)) => {
+                    self.frames_cycle = Self::cycle_iter(frames)
+                }
+                Some(SpinnerControl::Duration(dur)) => {
+                    self.duration = dur;
+                    if self.duration.is_zero() {
+                        match self.idling_frame {
+                            IdlingFrame::Is(frame) => self.set_frame(frame),
+                            IdlingFrame::Last => {}
+                        }
+                    }
+                }
+                _ => {}
+            }
+            if !self.duration.is_zero() {
+                self.set_next_frame();
             }
         })
     }
