@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+* Nothing
+
+## 0.1.3 (2023-09-14)
+
 ### Changed:
 
 * Fixed compilation issue due to dependency updates
