@@ -17,7 +17,7 @@
     unreachable_pub
 )]
 #![doc(test(attr(deny(warnings))))]
-#![doc(html_root_url = "https://docs.rs/cursive-spinner-view/0.1.3")]
+#![doc(html_root_url = "https://docs.rs/cursive-spinner-view/0.1.4")]
 
 mod spinner;
 mod view;

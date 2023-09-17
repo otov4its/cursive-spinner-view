@@ -4,6 +4,12 @@
 
 * Nothing
 
+## 0.1.4 (2023-09-17)
+
+### Changed:
+
+* Cargo.lock in .gitignore (see https://doc.rust-lang.org/cargo/faq.html#why-do-binaries-have-cargolock-in-version-control-but-not-libraries)
+
 ## 0.1.3 (2023-09-14)
 
 ### Changed:
