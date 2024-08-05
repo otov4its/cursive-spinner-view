@@ -178,6 +178,14 @@ impl View for SpinnerView {
     }
 }
 
+#[cursive_core::blueprint(SpinnerView::new(cb_sink.into_inner()))]
+struct Blueprint {
+    cb_sink: cursive_core::builder::NoConfig<CbSink>,
+
+    #[blueprint(setter=style)]
+    style: Option<StyleType>,
+}
+
 #[cfg(test)]
 mod tests {
     use std::thread;
