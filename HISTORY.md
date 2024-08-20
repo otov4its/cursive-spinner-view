@@ -4,6 +4,18 @@
 
 * Nothing
 
+## 0.1.5 (2024-08-20)
+
+### Added:
+
+* Blueprint for SpinnerView
+
+### Updated:
+
+* cursive-core to 0.4
+* cursive to 0.21
+* ntest to 0.9
+
 ## 0.1.4 (2023-09-17)
 
 ### Changed:

@@ -1,6 +1,6 @@
 [package]
 name = "cursive-spinner-view"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["Stanislav Otovchits <otov4its@gmail.com>"]
 description = "Cursive spinner view"
 license = "MIT OR Apache-2.0"
@@ -16,4 +16,4 @@ cursive_core = "0.4"
 
 [dev-dependencies]
 cursive = "0.21"
-ntest = "0.7"
+ntest = "0.9"
